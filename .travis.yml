@@ -1,0 +1,16 @@
+language: python
+python:
+  - '3.6'
+
+install:
+  - pip install -U pip
+
+before_script:
+  - pip install -r requirements.txt
+  - cd doudizhu
+
+script: 
+  - coverage run __init__.py
+
+after_success:
+  - coveralls
