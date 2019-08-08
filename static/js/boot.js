@@ -17,9 +17,6 @@ GLOBAL_H = 1080;
 
 INIT_CARD_SPEED = 400;
 
-AI1_UID = 998997991;
-AI2_UID = 998997992;
-
 var game_bg = 1;
 var origin_innerh,origin_innerw;
 
@@ -30,6 +27,8 @@ var btn_scale_ratio = 0.8;
 
 var landlord1, landlord2;
 
+// 游戏模式，0代表只允许一名玩家，1代表允许多名玩家
+var game_mode = 0;
 
 //是否是手机设备
 var is_mobile = false;
@@ -51,6 +50,7 @@ var is_mobile = false;
 PG.Boot = {
     preload: function () {
         this.load.image('preloaderBar', 'static/i/preload.png');
+        this.load.image('logo','static/i/logo.png');
     },
     create: function () {
         this.input.maxPointers = 1;
@@ -114,6 +114,11 @@ PG.Boot = {
 PG.Preloader = {
 
     preload: function () {
+        
+        // var logo = this.game.add.sprite(this.game.width/2, this.game.height/3, 'logo');
+        // logo.anchor.set(0.5,0.5);
+        // logo.scale.set(3,3);
+       
         this.preloadBar = this.game.add.sprite(this.game.width/2, this.game.height/2, 'preloaderBar');
         this.preloadBar.x -= this.preloadBar.width / 2;
         this.preloadBar.y -= this.preloadBar.height / 2;
@@ -128,18 +133,17 @@ PG.Preloader = {
         this.load.audio('f_score_1', 'static/audio/f_score_1.mp3');
         this.load.audio('f_score_2', 'static/audio/f_score_2.mp3');
         this.load.audio('f_score_3', 'static/audio/f_score_3.mp3');
-        //this.load.atlas('btn', 'static/i/btn.png', 'static/i/btn.json');
         this.load.atlas('btn2', 'static/i/btn2.png', 'static/i/btn2.json');
-        //this.load.atlas('material1', 'static/i/material1.png', 'static/i/material1.json');
         this.load.image('bg', 'static/i/bg1.png');
         this.load.image('bg1_right_top', 'static/i/bg1_right_top.png');
         this.load.image('bg1_left_bottom', 'static/i/bg1_left_bottom.png');
         this.load.image('playing_bg','static/i/bg2.png');
         this.load.image('join_game','static/i/join_game.png');
-        //this.load.spritesheet('poker', 'static/i/poker.png', 90, 120);
+        this.load.image('fight_ai','static/i/fight_ai.png');
+        this.load.image('human_play','static/i/human_play.png');
         this.load.spritesheet('poker', 'static/i/pokers.png', 118, 161.5);
         this.load.json('rule', 'static/rule.json');
-        this.load.image('robot','static/i/robot.png');
+        this.load.atlas('robot_and_btn', 'static/i/robot_and_btn.png', 'static/i/robot_and_btn.json');
     },
 
     create: function () {
@@ -181,7 +185,7 @@ PG.MainMenu = {
         aiRoom.anchor.set(0.5);
         this.game.world.add(aiRoom);
 
-        // var humanRoom = this.game.add.button(this.game.world.width / 2, this.game.world.height / 2, 'btn', this.gotoRoom, this, 'start.png', 'start.png', 'start.png');
+        // var humanRoom = this.game.add.button(this.game.world.width / 2, this.game.world.height / 2, 'human_play', this.gotoRoom, this);
         // humanRoom.anchor.set(0.5);
         // this.game.world.add(humanRoom);
 
@@ -196,6 +200,7 @@ PG.MainMenu = {
     },
 
     gotoAiRoom: function () {
+        game_mode = 0;
         // start(key, clearWorld, clearCache, parameter)
         this.state.start('Game', true, false, 1);
         //PG.music.sound = 'music_game'
@@ -204,6 +209,7 @@ PG.MainMenu = {
     },
 
     gotoRoom: function () {
+        game_mode = 1;
         this.state.start('Game', true, false, 2);
         PG.music.stop();
     },

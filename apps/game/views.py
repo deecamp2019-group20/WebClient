@@ -84,7 +84,11 @@ class SocketHandler(WebSocketHandler):
             self.write_message([Pt.RSP_NEW_TABLE, table.uid])
 
         elif code == Pt.REQ_JOIN_TABLE:
+            logging.info('==================================')
             table = self.room.find_waiting_table(packet[1])
+            seat = -1
+            if len(packet) > 2:
+                seat = packet[2]
             print('-------------------------------------')
             print(table)
             if not table:
@@ -92,7 +96,7 @@ class SocketHandler(WebSocketHandler):
                 logging.info('PLAYER[%d] JOIN TABLE[%d] NOT FOUND', self.uid, packet[1])
                 return
 
-            self.player.join_table(table)
+            self.player.join_table(table, seat)
             logging.info('PLAYER[%s] JOIN TABLE[%d]', self.uid, table.uid)
             if table.is_full():
                 table.deal_poker()
@@ -116,6 +120,8 @@ class SocketHandler(WebSocketHandler):
             self.handle_cheat(packet[1])
         elif code == Pt.REQ_RESTART:
             self.player.table.reset()
+        elif code == Pt.REQ_ADD_AI:
+            self.player.table.ai_join(seat=packet[1])
         else:
             logging.info('UNKNOWN PACKET: %s', code)
 

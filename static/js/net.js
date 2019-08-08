@@ -40,7 +40,10 @@ PG.Protocol = {
     RSP_CHAT : 44,
 
     REQ_RESTART : 45,
-    RSP_RESTART : 46
+    RSP_RESTART : 46,
+
+    REQ_ADD_AI : 47,
+    RSP_ADD_AI : 48
 };
 
 PG.Socket = {

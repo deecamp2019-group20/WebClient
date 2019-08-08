@@ -1,0 +1,52 @@
+{
+
+	"frames": [
+		{
+			"filename": "robot.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 204,
+				"h": 271
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 204,
+				"h": 271
+			},
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 204,
+				"h": 271
+			}
+		},
+		{
+			"filename": "add_ai.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 160,
+				"h": 60
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 160,
+				"h": 60
+			},
+			"frame": {
+				"x": 1,
+				"y": 274,
+				"w": 160,
+				"h": 60
+			}
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:22a2a75e0521caec85cde21ecdaa28f7:c4fb7e9c66341e2ca0d76eb06460f5ee:d31de202d7213cc8961db402b7b4c95a$"
+	}
+}

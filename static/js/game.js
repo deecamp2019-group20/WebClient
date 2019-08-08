@@ -18,6 +18,9 @@ PG.Game = function(game) {
     this.saying = false;
     // 地主牌
     this.landlordCards = null;
+
+    // 玩家的UID
+    this.uids = [-1,-1,-1]
 };
 
 PG.Game.prototype = {
@@ -47,6 +50,7 @@ PG.Game.prototype = {
         this.players.push(PG.createPlay(0, this));
         this.players.push(PG.createPlay(1, this));
         this.players.push(PG.createPlay(2, this));
+        this.uids[0] = PG.playerInfo.uid;
         this.players[0].updateInfo(PG.playerInfo.uid, PG.playerInfo.username);
         PG.Socket.connect(this.onopen.bind(this), this.onmessage.bind(this), this.onerror.bind(this));
 
@@ -92,6 +96,8 @@ PG.Game.prototype = {
                     if (playerIds[i][0] == this.players[0].uid) {
                         var info_1 = playerIds[(i+1)%3];
                         var info_2 = playerIds[(i+2)%3];
+                        this.uids[1] = info_1[0];
+                        this.uids[2] = info_2[0];
                         this.players[1].updateInfo(info_1[0], info_1[1]);
                         this.players[2].updateInfo(info_2[0], info_2[1]);
                         break;
@@ -235,19 +241,12 @@ PG.Game.prototype = {
 
         this.whoseTurn = 0;
 
-        this.stage.backgroundColor = '#182d3b';
         this.players.push(PG.createPlay(0, this));
         this.players.push(PG.createPlay(1, this));
         this.players.push(PG.createPlay(2, this));
-        //this.players[0].updateInfo(PG.playerInfo.uid, PG.playerInfo.username);
-        player_id = [PG.playerInfo.uid, AI1_UID, AI2_UID];
         for (var i = 0; i < 3; i++) {
-            //this.players[i].uiHead.kill();
-            this.players[i].updateInfo(player_id[i], ' ');
+            this.players[i].updateInfo(this.uids[i], ' ');
         }
-
-        // this.send_message([PG.Protocol.REQ_DEAL_POKEER, -1]);
-//        PG.Socket.send([PG.Protocol.REQ_JOIN_TABLE, this.tableId]);
 	},
 
 	update: function () {
@@ -505,12 +504,9 @@ PG.Game.prototype = {
         btn.parent.destroy();
     },
 
-    //阻塞
-    sleep:function(delay){
-        var start = (new Date()).getTime();
-        while ((new Date()).getTime() - start < delay) {
-            continue;
-        }
+    //添加一个AI
+    addAi: function(seat){
+        this.send_message([PG.Protocol.REQ_ADD_AI,seat]);
     }
 };
 

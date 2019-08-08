@@ -32,11 +32,17 @@ class Table(object):
         self.history = [None, None, None]
         self.last_winner = -1
         self.score_history = []
-        if room.allow_robot:
+        self.call_reset_num = 0   # 重新开始的请求数，达到3时才发牌，避免发多次牌
+        if room.allow_robot and room.add_robot_instantly:
             IOLoop.current().call_later(0.1, self.ai_join, nth=1)
 
     def reset(self):
-        
+        self.call_reset_num += 1
+        logging.info('=============================')
+        logging.info(self.call_reset_num)
+        if self.call_reset_num < 3:
+            return
+        self.call_reset_num = 0
         self.pokers: List[int] = []
         self.multiple = 1
         self.call_score = 0
@@ -58,23 +64,24 @@ class Table(object):
             self.room.on_table_changed(self)
             logging.info('TABLE[%s] GAME BEGIN[%s]', self.uid, self.players[0].uid)
 
-    def ai_join(self, nth=1):
+    def ai_join(self, nth=1, seat=-1):
         size = self.size()
         if size == 0 or size == 3:
             return
-
+        
         if size == 2 and nth == 1:
             IOLoop.current().call_later(1, self.ai_join, nth=2)
 
         logging.info('***************************************88')
         logging.info(self.players[0].uid)
 
-        p1 = AiPlayer(998997991, 'IDIOT-I', self.players[0])
-        p1.to_server([Pt.REQ_JOIN_TABLE, self.uid])
-
-        if size == 1:
-            p2 = AiPlayer(998997992, 'IDIOT-II', self.players[0])
-            p2.to_server([Pt.REQ_JOIN_TABLE, self.uid])
+        p1 = AiPlayer(self.room.ai_cur_uid, 'IDIOT-I', self.players[0])
+        self.room.ai_cur_uid += 1
+        p1.to_server([Pt.REQ_JOIN_TABLE, self.uid, seat])
+        if size == 1 and self.room.add_robot_instantly:
+            p2 = AiPlayer(self.room.ai_cur_uid, 'IDIOT-II', self.players[0])
+            self.room.ai_cur_uid += 1
+            p2.to_server([Pt.REQ_JOIN_TABLE, self.uid, seat])
 
     def sync_table(self):
         ps = []
@@ -145,15 +152,16 @@ class Table(object):
         for p in self.players:
             p.send(response)
 
-    def on_join(self, player):
+    def on_join(self, player, seat):
         if self.is_full():
             logging.error('Player[%d] JOIN Table[%d] FULL', player.uid, self.uid)
         for i, p in enumerate(self.players):
             if not p:
-                player.seat = i
-                self.players[i] = player
-                self.history[i] = []
-                break
+                if seat == -1 or seat == i:
+                    player.seat = i
+                    self.players[i] = player
+                    self.history[i] = []
+                    break
         self.sync_table()
 
     def on_leave(self, player):

@@ -26,6 +26,7 @@ class Player(object):
         self.is_called = False
         self.role = FARMER
         self.hand_pokers: List[int] = []
+        self.handout_pokers = [[]]
 
     def reset(self):
         self.ready = False
@@ -86,6 +87,7 @@ class Player(object):
             self.table.last_shot_poker = pokers
             for p in pokers:
                 self.hand_pokers.remove(p)
+        self.handout_pokers.append(pokers)
         logger.info('Player[%d] shot[%s]', self.uid, str(pokers))
         ended = True
         if self.hand_pokers:
@@ -97,10 +99,10 @@ class Player(object):
         if not self.hand_pokers:
             self.table.on_game_over(self)
 
-    def join_table(self, t):
+    def join_table(self, t, seat):
         self.ready = True
         self.table = t
-        t.on_join(self)
+        t.on_join(self, seat)
 
     def leave_table(self):
         self.ready = False

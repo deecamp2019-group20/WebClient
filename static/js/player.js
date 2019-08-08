@@ -8,14 +8,15 @@ PG.createPlay = function (seat, game) {
     player.initUI(xy[seat * 2], xy[seat * 2 + 1]);
     if (seat == 0) {
         player.initShotLayer();
-    } else if (seat == 1) {
+    } 
+    if(seat == 1 && game_mode == 0){
         player.uiHead.scale.set(-1, 1);
     }
     return player;
 };
 
 PG.Player = function (seat, game) {
-    this.uid = seat;
+    this.uid = -1;
     this.seat = seat;
     this.game = game;
 
@@ -29,32 +30,50 @@ PG.Player = function (seat, game) {
 
 PG.Player.prototype.initUI = function (sx, sy) {
     if(this.seat != 0){
-        this.uiHead = this.game.add.sprite(sx, sy, 'robot');
+        if(game_mode == 0){
+            this.uiHead = this.game.add.sprite(sx, sy, 'robot_and_btn', "robot.png");
+        }else{
+            this.uiHead = this.game.add.sprite(sx, sy, 'robot_and_btn', "add_ai.png");
+        }
+        
     }else{
         this.uiHead = this.game.add.text(sx, sy, '', landlord_style);
     }
 
-    
-    //this.uiHead = this.game.add.sprite(sx, sy, 'btn', 'material1.png');
-    
+    //点击添加按钮添加AI玩家
+    if(game_mode == 1 && this.seat != 0){
+        this.uiHead.inputEnabled = true;
+        this.uiHead.events.onInputDown.add(addAnAI, this);
+    }
+
     this.uiHead.anchor.set(0.5, 1);
 
     this.sx = sx;
     this.sy = sy;
 };
 
+addAnAI = function(){
+    if(this.uid != -1){
+        return;
+    }
+    this.game.addAi(this.seat);
+};
+
 PG.Player.prototype.updateInfo = function (uid, name) {
-    this.uid = uid;
-    // if (uid == -1) {
-    //     this.uiHead.frameName = 'ai.png';
-    // } else {
-    //     if(this.seat == 0){
-    //         this.uiHead.frameName = 'robot.png';
-    //     }else{
-    //         this.uiHead.frameName = 'bg';
-    //     }
-        
-    // }
+    if(uid != -1){
+        this.uid = uid;
+        if (this.seat != 0) {
+            this.uiHead.frame = 0;
+            if (this.seat == 1) {
+                this.uiHead.scale.set(-1, 1);
+            }
+        }
+        // if(this.seat != 0){
+        //     this.uiHead.destroy();
+        //     this.uiHead = this.game.add.sprite(this.sx, this.sy, 'add_ai');
+        //     this.uiHead.anchor.set(0.5, 1);
+        // }
+    }
 };
 
 PG.Player.prototype.cleanPokers = function () {

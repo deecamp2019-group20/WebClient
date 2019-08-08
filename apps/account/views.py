@@ -11,22 +11,19 @@ class HomeHandler(BaseHandler):
         if not self.get_cookie("_csrf"):
             self.set_cookie("_csrf", self.xsrf_token)
         
-        # user = xhtml_escape(self.current_user or '')
-        user = self.current_user or ''
-        if user == '':
-            ip = self.client_ip
-            user_id = await self.db.fetchone('SELECT id FROM user WHERE ip=%s', ip)
-            if user_id is None:
-                user_id = await self.db.insert('INSERT INTO user (ip) VALUES (%s)',
-                                   ip)
-            if type(user_id) != int:
-                user_id = user_id['id']
-            info = {
-                'uid': user_id,
-                'username': str(uuid.uuid1()),
-            }
-            user = json_encode(info)
-            self.set_secure_cookie('user', user)
+        ip = self.client_ip
+        user_id = await self.db.fetchone('SELECT id FROM user WHERE ip=%s', ip)
+        if user_id is None:
+            user_id = await self.db.insert('INSERT INTO user (ip) VALUES (%s)',
+                                ip)
+        if type(user_id) != int:
+            user_id = user_id['id']
+        info = {
+            'uid': user_id,
+            'username': str(uuid.uuid1()),
+        }
+        user = json_encode(info)
+        self.set_secure_cookie('user', user)
         self.render('poker.html', user=user)
 
 

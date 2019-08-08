@@ -17,7 +17,7 @@ class AiPlayer(Player):
         from ..views import LoopBackSocketHandler
         super().__init__(uid, username, LoopBackSocketHandler(self))
         self.room = player.room
-        self.ai_addr = 'http://117.78.4.26:5000/'
+        self.ai_addr = 'http://117.78.4.26:5001/'
 
     def to_server(self, message):
         packet = json.dumps(message)
@@ -34,17 +34,10 @@ class AiPlayer(Player):
         elif code == Pt.RSP_JOIN_TABLE:
             pass
         elif code == Pt.RSP_DEAL_POKER:
-            
             if self.uid == packet[1]:
-                # print('-----------------auto_call_score:')
-                # print(packet[1])
                 self.auto_call_score()
         elif code == Pt.RSP_CALL_SCORE:
-            # print('-------------------uid:%d'%self.uid)
-            # print(self.table.turn_player.uid)
             if self.table.turn_player == self:
-                # caller = packet[1]
-                # score = packet[2]
                 call_end = packet[3]
                 if not call_end:
                     self.auto_call_score()
@@ -59,6 +52,7 @@ class AiPlayer(Player):
         elif code == Pt.RSP_GAME_OVER:
             winner = packet[1]
             coin = packet[2]
+            IOLoop.current().add_callback(self.to_server, [Pt.REQ_RESTART])
         else:
             logging.info('AI ERROR PACKET: %s', packet)
 
@@ -81,21 +75,21 @@ class AiPlayer(Player):
         body['cur_cards'] = self.change_card_type(self.hand_pokers)
         history = {}
         lefts = {}
+        last_takens = {}
         for player in self.table.players:
-            logging.info(player.seat)
-            logging.info(player.hand_pokers)
-            logging.info(player.table.history)
             h = player.table.history[player.seat]
             l = len(player.hand_pokers)
             history[player.role] = self.change_card_type(h)
             lefts[player.role] = l
+            last_takens[player.role] = self.change_card_type(player.handout_pokers[-1])
         logging.info(self.table.last_shot_poker)
         body['history'] = history
         body['left'] = lefts
-        if not self.table.last_shot_poker or self.table.last_shot_seat == self.seat:
-            body['last_taken'] = []
-        else:
-            body['last_taken'] = self.change_card_type(self.table.last_shot_poker)
+        body['last_taken'] = last_takens
+        # if not self.table.last_shot_poker or self.table.last_shot_seat == self.seat:
+        #     body['last_taken'] = []
+        # else:
+        #     body['last_taken'] = self.change_card_type(self.table.last_shot_poker)
         print(body)
         #self.f()
         res = requests.post(self.ai_addr, json=body)

@@ -6,12 +6,15 @@ from .table import Table
 
 class Room(object):
 
-    def __init__(self, uid, allow_robot=True):
+    def __init__(self, uid, allow_robot=True, add_robot_instantly = True):
         self.uid = uid
         self.__waiting_tables = {}
         self.__playing_tables = {}
         self.allow_robot = allow_robot
+        self.add_robot_instantly = add_robot_instantly
         self.entrance_fee = 100
+        # AI的现在可获取的起始uid
+        self.ai_cur_uid = 9998
         logging.info('ROOM[%d] CREATED', uid)
 
     def rsp_tables(self):
@@ -53,8 +56,8 @@ class RoomManager(object):
     __metaclass__ = Singleton
 
     __room_dict = {
-        1: Room(1, True),
-        2: Room(2, False),
+        1: Room(1, True, True),
+        2: Room(2, False, False),
     }
 
     __current_table_id = 0
