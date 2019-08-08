@@ -6,10 +6,7 @@
 
 斗地主游戏，后端基于Python+Tornado+MySQL开发，前端 Phaser 引擎
 
-**Dependencies**
 
-* Python3.6+
-* Mysql5.7+
 
 
 Quick Start
@@ -19,16 +16,7 @@ Quick Start
     mysql --user=root -p < schema.sql
     pip3 install -r requirements.txt
     cd doudizhu
-    python3 app.py --password=your_database_password
+    python3 app.py
     Now visit http://127.0.0.1:8080
 
 
-Online Demo  
-<http://m.ihouser.com/>  
-
-
-运行截图
-
-![](https://raw.githubusercontent.com/mailgyc/doudizhu/master/screenshot/a.png)
-![](https://raw.githubusercontent.com/mailgyc/doudizhu/master/screenshot/c.png)
-![](https://raw.githubusercontent.com/mailgyc/doudizhu/master/screenshot/d.png)
