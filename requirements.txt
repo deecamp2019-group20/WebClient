@@ -5,4 +5,4 @@ pillow==5.4.1
 raven==6.10.0
 sentry-sdk==0.7.4
 tornado==5.1.1
-
+requests==2.22.0
