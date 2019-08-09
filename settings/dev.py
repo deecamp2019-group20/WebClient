@@ -13,7 +13,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['console'],
     },
     'formatters': {

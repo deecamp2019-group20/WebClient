@@ -7,7 +7,8 @@ from tornado.ioloop import IOLoop
 from .player import Player
 from .protocol import Protocol as Pt
 from .components.simple import AiPlayer
-
+from contrib.handlers import BaseHandler
+import requests,json
 
 class Table(object):
 
@@ -17,6 +18,8 @@ class Table(object):
     CLOSED = 3
 
     def __init__(self, uid, room):
+        self.record_addr = 'http://127.0.0.1:5000/record'
+
         self.uid = uid
         self.room = room
         self.players: List[Player] = [None, None, None]
@@ -33,13 +36,12 @@ class Table(object):
         self.last_winner = -1
         self.score_history = []
         self.call_reset_num = 0   # 重新开始的请求数，达到3时才发牌，避免发多次牌
+        
         if room.allow_robot and room.add_robot_instantly:
             IOLoop.current().call_later(0.1, self.ai_join, nth=1)
 
     def reset(self):
         self.call_reset_num += 1
-        logging.info('=============================')
-        logging.info(self.call_reset_num)
         if self.call_reset_num < 3:
             return
         self.call_reset_num = 0
@@ -72,8 +74,6 @@ class Table(object):
         if size == 2 and nth == 1:
             IOLoop.current().call_later(1, self.ai_join, nth=2)
 
-        logging.info('***************************************88')
-        logging.info(self.players[0].uid)
 
         p1 = AiPlayer(self.room.ai_cur_uid, 'IDIOT-I', self.players[0])
         self.room.ai_cur_uid += 1
@@ -98,25 +98,16 @@ class Table(object):
     def deal_poker(self):
         # if not all(p and p.ready for p in self.players):
         #     return
-
+        
         self.state = Table.PLAYING
         self.pokers = [i for i in range(54)]
         random.shuffle(self.pokers)
         for i in range(51):
             self.players[i % 3].hand_pokers.append(self.pokers.pop())
-        for i in range(3):
-            print('---------------------------------------')
-            print(self.players[i].hand_pokers)
-        #self.whose_turn = random.randint(0, 2)
         if self.last_winner != -1:
             self.whose_turn = self.last_winner
         else:
             self.whose_turn = 0
-        # print('whose_turn----------------------------')
-        # print(self.turn_player)
-        logging.info('*********************************')
-        logging.info(self.turn_player.uid)
-        logging.info(self.whose_turn)
         for p in self.players:
             p.hand_pokers.sort()
             
@@ -178,10 +169,16 @@ class Table(object):
         return -1
 
     def on_game_over(self, winner):
-        # if winner.hand_pokers:
-        #     return
-        print('winner----------------------------')
-        print(self._uid2seat(winner.uid))
+        body = {'is_human':{},'record':{}}
+        for player in self.players:
+            logging.debug(player.role)
+            if isinstance(player, AiPlayer):
+                body['is_human'][player.role] = 0
+            else:
+                body['is_human'][player.role] = 1
+            body['record'][player.role] = 1 if winner == player else 0
+        logging.debug(body)
+        res = requests.post(self.record_addr, json=body)
         self.last_winner = self._uid2seat(winner.uid)
         coin = self.room.entrance_fee * self.call_score * self.multiple
         for p in self.players:

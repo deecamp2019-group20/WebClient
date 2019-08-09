@@ -71,6 +71,14 @@ class AsyncConnection(object):
         finally:
             await cursor.release()
 
+    async def update(self, query: str, *args, **kwargs):
+        cursor = await self.cursor()
+        try:
+            await self._execute(cursor, query, args, kwargs)
+            return cursor.rowcount
+        finally:
+            await cursor.release()
+
     async def cursor(self, conn=None) -> aiomysql.Cursor:
         in_transaction = conn is not None
         if not conn:

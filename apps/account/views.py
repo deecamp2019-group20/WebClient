@@ -3,6 +3,7 @@ import bcrypt
 from contrib.handlers import BaseHandler
 from tornado.escape import json_encode
 import uuid
+import logging
 
 class HomeHandler(BaseHandler):
 
@@ -25,7 +26,6 @@ class HomeHandler(BaseHandler):
         user = json_encode(info)
         self.set_secure_cookie('user', user)
         self.render('poker.html', user=user)
-
 
 class SignupHandler(BaseHandler):
 
