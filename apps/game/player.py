@@ -33,6 +33,7 @@ class Player(object):
         self.is_called = False
         self.role = FARMER
         self.hand_pokers: List[int] = []
+        self.handout_pokers = [[]]
         self.send([Pt.RSP_RESTART])
 
     def send(self, packet):

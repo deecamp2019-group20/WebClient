@@ -33,31 +33,43 @@ var game_mode = 0;
 //是否是手机设备
 var is_mobile = false;
 
-// let direction = '1'
-// function getDirection() {
-//     switch (window.orientation) {
-//         case 0:
-//         case 180:
-//             direction = '1'
-//             break;
-//         case -90:
-//         case 90:
-//             direction = '一'
-//             break;
-//     }
-// }
-// alert(direction)
+let direction = '1'
+function getDirection() {
+    switch (window.orientation) {
+        case 0:
+        case 180:
+            direction = '1'
+            break;
+        case -90:
+        case 90:
+            direction = '一'
+            break;
+    }
+}
+
 PG.Boot = {
     preload: function () {
         this.load.image('preloaderBar', 'static/i/preload.png');
         this.load.image('logo','static/i/logo.png');
     },
     create: function () {
+        var device = this.game.device;
+        //判断是否是手机并且竖屏
+        if (device.android || device.iOS) {
+            is_mobile = true;
+        } 
+        getDirection();
+        if(is_mobile && direction == 1){
+            alert("请将手机横屏并刷新");
+            return;
+        }
+
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
         this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
+        
         // this.game.scale.onSizeChange.add(function(){
         //     var h = window.innerHeight * GLOBAL_W/window.innerWidth;
         //     //if (h > 1000) h = 1000;
@@ -97,10 +109,10 @@ PG.Boot = {
         this.scale.forceOrientation(true);
     },
     enterIncorrectOrientation: function () {
-        var device = this.game.device;
-        if (device.android || device.iOS) {
-            alert('请在横屏状态下打开此页面');
-        }
+        // var device = this.game.device;
+        // if (device.android || device.iOS) {
+        //     alert('请在横屏状态下打开此页面');
+        // }
         PG.orientated = false;
         document.getElementById('orientation').style.display = 'block';
     },
