@@ -15,7 +15,8 @@ PG.PH = 120;
 GLOBAL_W = 1920;
 GLOBAL_H = 1080;
 
-INIT_CARD_SPEED = 400;
+FAPAI_SPEED = 200;
+INIT_CARD_SPEED = 500;
 
 var game_bg = 1;
 var origin_innerh,origin_innerw;
@@ -32,6 +33,9 @@ var game_mode = 0;
 
 //是否是手机设备
 var is_mobile = false;
+
+var fight_ai_str = "对战两个斗地主AI";
+var fight_human_str="优先匹配真人玩家\n在线人数不足时可添加斗地主AI";
 
 let direction = '1'
 function getDirection() {
@@ -141,12 +145,68 @@ PG.Preloader = {
         this.load.audio('music_deal', 'static/audio/deal.mp3');
         this.load.audio('music_win', 'static/audio/end_win.mp3');
         this.load.audio('music_lose', 'static/audio/end_lose.mp3');
-        this.load.audio('f_score_0', 'static/audio/f_score_0.mp3');
-        this.load.audio('f_score_1', 'static/audio/f_score_1.mp3');
-        this.load.audio('f_score_2', 'static/audio/f_score_2.mp3');
-        this.load.audio('f_score_3', 'static/audio/f_score_3.mp3');
+        this.load.audio('score_0', 'static/audio/m_score_0.mp3');
+        this.load.audio('score_1', 'static/audio/m_score_1.mp3');
+        this.load.audio('score_2', 'static/audio/m_score_2.mp3');
+        this.load.audio('score_3', 'static/audio/m_score_3.mp3');
+
+        this.load.audio('yaobuqi', 'static/audio/yaobuqi.ogg');
+        this.load.audio('dan3', 'static/audio/dan3.ogg');
+        this.load.audio('dan4', 'static/audio/dan4.ogg');
+        this.load.audio('dan5', 'static/audio/dan5.ogg');
+        this.load.audio('dan6', 'static/audio/dan6.ogg');
+        this.load.audio('dan7', 'static/audio/dan7.ogg');
+        this.load.audio('dan8', 'static/audio/dan8.ogg');
+        this.load.audio('dan9', 'static/audio/dan9.ogg');
+        this.load.audio('dan0', 'static/audio/dan0.ogg');
+        this.load.audio('danJ', 'static/audio/danJ.ogg');
+        this.load.audio('danQ', 'static/audio/danQ.ogg');
+        this.load.audio('danK', 'static/audio/danK.ogg');
+        this.load.audio('danA', 'static/audio/danA.ogg');
+        this.load.audio('dan2', 'static/audio/dan2.ogg');
+        this.load.audio('danw', 'static/audio/danw.ogg');
+        this.load.audio('danww', 'static/audio/danww.ogg');
+
+        this.load.audio('dui3', 'static/audio/dui3.ogg');
+        this.load.audio('dui4', 'static/audio/dui4.ogg');
+        this.load.audio('dui5', 'static/audio/dui5.ogg');
+        this.load.audio('dui6', 'static/audio/dui6.ogg');
+        this.load.audio('dui7', 'static/audio/dui7.ogg');
+        this.load.audio('dui8', 'static/audio/dui8.ogg');
+        this.load.audio('dui9', 'static/audio/dui9.ogg');
+        this.load.audio('dui0', 'static/audio/dui0.ogg');
+        this.load.audio('duiJ', 'static/audio/duiJ.ogg');
+        this.load.audio('duiQ', 'static/audio/duiQ.ogg');
+        this.load.audio('duiK', 'static/audio/duiK.ogg');
+        this.load.audio('duiA', 'static/audio/duiA.ogg');
+        this.load.audio('dui2', 'static/audio/dui2.ogg');
+
+        this.load.audio('san3', 'static/audio/san3.ogg');
+        this.load.audio('san4', 'static/audio/san4.ogg');
+        this.load.audio('san5', 'static/audio/san5.ogg');
+        this.load.audio('san6', 'static/audio/san6.ogg');
+        this.load.audio('san7', 'static/audio/san7.ogg');
+        this.load.audio('san8', 'static/audio/san8.ogg');
+        this.load.audio('san9', 'static/audio/san9.ogg');
+        this.load.audio('san0', 'static/audio/san0.ogg');
+        this.load.audio('sanJ', 'static/audio/sanJ.ogg');
+        this.load.audio('sanQ', 'static/audio/sanQ.ogg');
+        this.load.audio('sanK', 'static/audio/sanK.ogg');
+        this.load.audio('sanA', 'static/audio/sanA.ogg');
+        this.load.audio('san2', 'static/audio/san2.ogg');
+
+        this.load.audio('shunzi', 'static/audio/shunzi.ogg');
+        this.load.audio('liandui', 'static/audio/liandui.ogg');
+        this.load.audio('feiji', 'static/audio/feiji.ogg');
+        this.load.audio('wangzha', 'static/audio/wangzha.ogg');
+        this.load.audio('zhadan', 'static/audio/zhadan.ogg');
+        this.load.audio('sidaier', 'static/audio/sidaier.ogg');
+        this.load.audio('sidaidui', 'static/audio/sidaidui.ogg');
+        this.load.audio('fapai', 'static/audio/fapai.mp3');
+
         this.load.atlas('btn2', 'static/i/btn2.png', 'static/i/btn2.json');
         this.load.image('bg', 'static/i/bg1.png');
+        this.load.image('black_bg', 'static/i/black_bg.png');
         this.load.image('bg1_right_top', 'static/i/bg1_right_top.png');
         this.load.image('bg1_left_bottom', 'static/i/bg1_left_bottom.png');
         this.load.image('playing_bg','static/i/bg2.png');
@@ -156,6 +216,7 @@ PG.Preloader = {
         this.load.spritesheet('poker', 'static/i/pokers.png', 118, 161.5);
         this.load.json('rule', 'static/rule.json');
         this.load.atlas('robot_and_btn', 'static/i/robot_and_btn.png', 'static/i/robot_and_btn.json');
+        this.load.atlas('mode_btn', 'static/i/mode_btn.png', 'static/i/mode_btn.json');
     },
 
     create: function () {
@@ -190,13 +251,17 @@ PG.MainMenu = {
         bg.anchor.set(0.5, 0);
         var bg1_right_top = this.game.add.sprite(this.game.width-966, 0, 'bg1_right_top');
         var bg1_left_bottom = this.game.add.sprite(0, this.game.height-176, 'bg1_left_bottom');
+
         
-        // 首页按钮
 
-        var aiRoom = this.game.add.button(this.game.world.width / 2, this.game.world.height / 4, 'join_game', this.gotoAiRoom, this);
-        aiRoom.anchor.set(0.5);
-        this.game.world.add(aiRoom);
+        // 开始游戏按钮
+        this.start_game = this.game.add.button(this.game.world.width / 2, this.game.world.height / 4, 'join_game', this.showMask, this);
+        this.start_game.anchor.set(0.5);
+        this.game.world.add(this.start_game);
+        
+        
 
+        
         // var humanRoom = this.game.add.button(this.game.world.width / 2, this.game.world.height / 2, 'human_play', this.gotoRoom, this);
         // humanRoom.anchor.set(0.5);
         // this.game.world.add(humanRoom);
@@ -209,6 +274,91 @@ PG.MainMenu = {
         // var text = this.game.add.text(this.game.world.width - 4, 4, "欢迎回来 " + PG.playerInfo.username, style);
         // text.addColor('#cc00cc', 4);
         // text.anchor.set(1, 0);
+    },
+
+    showMask: function(){
+        this.start_game.inputEnabled = false;
+        
+        this.mask = this.game.add.sprite(this.game.width / 2, 0, 'black_bg');
+        
+        this.mask.width = GLOBAL_W;
+        this.mask.height = GLOBAL_H;
+        this.mask.anchor.set(0.5, 0);
+        this.mask.alpha = 0.99;
+        this.choose_mode = this.game.add.text(this.game.width / 2,this.game.height/10,"选择模式",{font:"65px myFont",fill:"#ffffff"});
+        this.choose_mode.anchor.set(0.5,0);
+        this.fight_ai = this.game.add.sprite(this.game.width / 10 * 3, this.game.height/3, 'mode_btn', "fight_ai1.png");
+        this.fight_ai.anchor.set(0.5, 0);
+        this.fight_ai.inputEnabled = true;
+        this.fight_ai.events.onInputOver.add(function(){
+            this.fight_ai.frame = 1;
+        }, this);
+        this.fight_ai.events.onInputOut.add(function(){
+            this.fight_ai.frame = 0;
+        }, this);
+        this.fight_ai.events.onInputDown.add(function(){
+            this.gotoAiRoom();
+        }, this);
+
+        this.fight_ai_desc = this.game.add.text(this.game.width / 10 * 3,this.game.height/10*5,fight_ai_str,{font:"35px myFont",fill:"#ffffff"});
+        this.fight_ai_desc.anchor.set(0.5,0);
+
+        this.fight_human_desc = this.game.add.text(this.game.width / 10 * 7,this.game.height/10*5,fight_human_str,{font:"35px myFont",fill:"#ffffff",align:"center"});
+        this.fight_human_desc.anchor.set(0.5,0);
+
+        this.fight_human = this.game.add.sprite(this.game.width / 10 * 7, this.game.height/3, 'mode_btn', "fight_human1.png");
+        this.fight_human.anchor.set(0.5, 0);
+        this.fight_human.inputEnabled = true;
+        this.fight_human.events.onInputOver.add(function(){
+            this.fight_human.frame = 3;
+        }, this);
+        this.fight_human.events.onInputOut.add(function(){
+            this.fight_human.frame = 2;
+        }, this);
+        this.fight_human.events.onInputDown.add(function(){
+            this.find_room_desc = this.game.add.text(this.game.width / 2,this.game.height/2,"",{font:"35px myFont",fill:"#ffffff",align:"center"});
+            this.find_room_desc.anchor.set(0.5,0.5);
+            this.choose_mode.kill();
+            this.fight_ai.kill();
+            this.fight_human.kill();
+            this.return_homepage.kill();
+            this.fight_ai_desc.kill();
+            this.fight_human_desc.kill();
+            var MAX_LODING_TIME = 10;
+            for(var i = 0; i < MAX_LODING_TIME; i++){
+                console.log(i);
+                this.game.time.events.add(200*(i+1), function(i){
+                    var str = "寻找房间中";
+                    for(var j = 0; j <= i % 5; j++){
+                        console.log(i);
+                        str += ".";
+                    }
+                    this.find_room_desc.text = str;
+                }, this,i);
+            };
+            this.game.time.events.add(200*(MAX_LODING_TIME+1),this.gotoRoom,this);
+            
+        }, this);
+
+        this.return_homepage = this.game.add.sprite(this.game.width / 2, this.game.height/10*8, 'mode_btn', "return1.png");
+        this.return_homepage.anchor.set(0.5,0);
+        this.return_homepage.inputEnabled = true;
+        this.return_homepage.events.onInputOver.add(function(){
+            this.return_homepage.frame = 5;
+        }, this);
+        this.return_homepage.events.onInputOut.add(function(){
+            this.return_homepage.frame = 6;
+        }, this);
+        this.return_homepage.events.onInputDown.add(function(){
+            this.mask.kill();
+            this.choose_mode.kill();
+            this.fight_ai.kill();
+            this.fight_human.kill();
+            this.return_homepage.kill();
+            this.fight_ai_desc.kill();
+            this.fight_human_desc.kill();
+            this.start_game.inputEnabled = true;
+        }, this);
     },
 
     gotoAiRoom: function () {

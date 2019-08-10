@@ -30,6 +30,7 @@ PG.Player = function (seat, game) {
 
 PG.Player.prototype.initUI = function (sx, sy) {
     if(this.seat != 0){
+        
         if(game_mode == 0){
             this.uiHead = this.game.add.sprite(sx, sy, 'robot_and_btn', "robot.png");
         }else{
@@ -63,7 +64,7 @@ PG.Player.prototype.updateInfo = function (uid, name) {
     if(uid != -1){
         this.uid = uid;
         if (this.seat != 0) {
-            this.uiHead.frame = 0;
+            this.uiHead.frame = 1;
             if (this.seat == 1) {
                 this.uiHead.scale.set(-1, 1);
             }
@@ -309,7 +310,7 @@ PG.Player.prototype.dealPokerAnim = function (p, i) {
     this.game.add.tween(p).to({
         x: this.game.world.width / 2 + PG.PW * 0.5 * (i - 8.5),
         y: this.game.world.height - 140
-    }, INIT_CARD_SPEED, Phaser.Easing.Default, true, 50 * i);
+    }, FAPAI_SPEED, Phaser.Easing.Default, true, 50 * i);
 };
 
 PG.Player.prototype.arrangePoker = function () {

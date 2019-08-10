@@ -17,7 +17,7 @@ class AiPlayer(Player):
         from ..views import LoopBackSocketHandler
         super().__init__(uid, username, LoopBackSocketHandler(self))
         self.room = player.room
-        self.ai_addr = 'http://127.0.0.1:5000/'
+        self.ai_addr = 'http://117.78.4.26:5000/'
 
     def to_server(self, message):
         packet = json.dumps(message)

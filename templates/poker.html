@@ -1,43 +1,69 @@
 <!doctype html>
-<html lang="en"> 
+<html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<title>斗地主</title>
-<script type="text/javascript" src="{{static_url('js/phaser.min.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/phaser-input.min.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/boot.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/game.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/rule.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/player.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/player_net.js')}}"></script>
-<script type="text/javascript" src="{{static_url('js/net.js')}}"></script>
-<style type="text/css">body{padding:0; margin:0;background-color: black;} #game{ margin:auto;}</style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>斗地主</title>
+    <script type="text/javascript" src="{{static_url('js/phaser.min.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/phaser-input.min.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/boot.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/game.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/rule.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/player.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/player_net.js')}}"></script>
+    <script type="text/javascript" src="{{static_url('js/net.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{static_url('css/my_font.css')}}">
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: black;
+        }
+
+        #game {
+            margin: auto;
+        }
+
+        #mask{
+            position: absolute;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
-<div id="game"></div>
-<div id="orientation"></div>
-<input id="user" type="hidden" value="{{user}}">
-<script>
-(function () {
-    var w = 1920;
-    var h = window.innerHeight * w/window.innerWidth;
-    
-    //if (h > 950) h = 950;
-    //h = 1080;
-    GLOBAL_H = h;
-    GLOBAL_W = w;
-    origin_innerh = window.innerHeight;
-    origin_innerw = window.innerWidth;
-    var game = new Phaser.Game(w, h, Phaser.AUTO, 'game');
-    
-    game.state.add('Boot', PG.Boot);
-    game.state.add('Preloader', PG.Preloader);
-    game.state.add('Login', PG.Login);
-    game.state.add('MainMenu', PG.MainMenu);
-    game.state.add('Game', PG.Game);
-    game.state.start('Boot');
-})();
-</script>
+    <div id="game"></div>
+    <!--<div id="mask"></div>-->
+    <div id="orientation"></div>
+    <input id="user" type="hidden" value="{{user}}">
+    <script>
+        (function () {
+            var w = 1920;
+            var h = window.innerHeight * w / window.innerWidth;
+
+            //if (h > 950) h = 950;
+            //h = 1080;
+            GLOBAL_H = h;
+            GLOBAL_W = w;
+            origin_innerh = window.innerHeight;
+            origin_innerw = window.innerWidth;
+            var game = new Phaser.Game(w, h, Phaser.AUTO, 'game');
+
+            game.state.add('Boot', PG.Boot);
+            game.state.add('Preloader', PG.Preloader);
+            game.state.add('Login', PG.Login);
+            game.state.add('MainMenu', PG.MainMenu);
+            game.state.add('Game', PG.Game);
+            game.state.start('Boot');
+        })();
+    </script>
 </body>
+
 </html>

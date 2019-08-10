@@ -1,0 +1,156 @@
+{
+	"frames": [
+		{
+			"filename": "fight_ai1.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 421,
+				"h": 123
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 421,
+				"h": 123
+			},
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 421,
+				"h": 123
+			}
+		},
+		{
+			"filename": "fight_ai2.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 421,
+				"h": 123
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 421,
+				"h": 123
+			},
+			"frame": {
+				"x": 1,
+				"y": 126,
+				"w": 421,
+				"h": 123
+			}
+		},
+		{
+			"filename": "fight_human1.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 421,
+				"h": 123
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 421,
+				"h": 123
+			},
+			"frame": {
+				"x": 1,
+				"y": 251,
+				"w": 421,
+				"h": 123
+			}
+		},
+		{
+			"filename": "fight_human2.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 421,
+				"h": 123
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 421,
+				"h": 123
+			},
+			"frame": {
+				"x": 1,
+				"y": 376,
+				"w": 421,
+				"h": 123
+			}
+		},
+		{
+			"filename": "add_ai.png",
+			"rotated": false,
+			"trimmed": true,
+			"sourceSize": {
+				"w": 261,
+				"h": 131
+			},
+			"spriteSourceSize": {
+				"x": 3,
+				"y": 3,
+				"w": 254,
+				"h": 126
+			},
+			"frame": {
+				"x": 1,
+				"y": 501,
+				"w": 254,
+				"h": 126
+			}
+		},
+		{
+			"filename": "return2.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 152,
+				"h": 81
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 152,
+				"h": 81
+			},
+			"frame": {
+				"x": 257,
+				"y": 501,
+				"w": 152,
+				"h": 81
+			}
+		},
+		{
+			"filename": "return1.png",
+			"rotated": false,
+			"trimmed": false,
+			"sourceSize": {
+				"w": 152,
+				"h": 80
+			},
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 152,
+				"h": 80
+			},
+			"frame": {
+				"x": 257,
+				"y": 584,
+				"w": 152,
+				"h": 80
+			}
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:d030d71d03f5e90774ece544b804ee10:673523b7928f6bb973aebe294ae7bbd6:85733b77c5055cbb6eefcfa679a365ed$"
+	}
+}

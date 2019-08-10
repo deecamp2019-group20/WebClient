@@ -107,7 +107,11 @@ PG.Game.prototype = {
             case PG.Protocol.RSP_DEAL_POKER:
                 var playerId = packet[1];
                 var pokers = packet[2];
-                console.log('---------------------' + pokers);
+                
+                //发牌音乐
+                var audio = this.game.add.audio('fapai');
+                audio.play();
+
                 this.dealPoker(pokers);
                 this.whoseTurn = this.uidToSeat(playerId);
                 if(this.whoseTurn == 0){
@@ -131,7 +135,7 @@ PG.Game.prototype = {
 
                 var hanzi = ['不叫', "一分", "两分", "三分"];
                 this.players[this.whoseTurn].say(hanzi[score]);
-                var audio = this.game.add.audio('f_score_' + score);
+                var audio = this.game.add.audio('score_' + score);
                 audio.play();
                 this.saying = true;
                 audio.onStop.add(function(){
@@ -176,7 +180,14 @@ PG.Game.prototype = {
                     //     var audio = this.game.add.audio('music_lose');
                     // }
                     // audio.play();
-                    alert(this.players[this.whoseTurn].isLandlord ? "地主赢" : "农民赢");
+
+
+                    if(this.whoseTurn == 0){
+                        alert('你赢了！');
+                        
+                    }else{
+                        alert('你输了！');
+                    }
                     this.cleanWorld();
                     PG.Socket.send([PG.Protocol.REQ_RESTART]);
                 }
@@ -365,7 +376,12 @@ PG.Game.prototype = {
         var ended = packet[3];
         if (pokers.length == 0) {
             this.players[this.whoseTurn].say("不出");
+            var audio = this.game.add.audio('yaobuqi');
+            audio.play();
         } else {
+            var audio = this.getAudio(pokers);
+            audio.play();
+
             var pokersPic = {};
             pokers.sort(PG.Poker.comparePoker);
             var count= pokers.length;
@@ -507,6 +523,62 @@ PG.Game.prototype = {
     //添加一个AI
     addAi: function(seat){
         this.send_message([PG.Protocol.REQ_ADD_AI,seat]);
+    },
+
+    //根据出牌获取音效
+    getAudio: function(pokers){
+        var cards = PG.Poker.toCards(pokers);
+        var value = PG.Rule.cardsValue(cards);
+        if(value[0] == 'single'){
+            if(cards == 'W'){
+                cards = 'ww';
+            }
+            var audio = this.game.add.audio('dan'+cards);
+        }else if(value[0] == 'pair'){
+            cards = cards[0];
+            var audio = this.game.add.audio('dui'+cards);
+        }else if(value[0].indexOf('trio') == 0){
+            cards = this.mainChar(cards);
+            var audio = this.game.add.audio('san'+cards);
+        }else if(value[0].indexOf('seq_single') == 0){
+            var audio = this.game.add.audio('shunzi');
+        }else if(value[0].indexOf('seq_pair') == 0){
+            var audio = this.game.add.audio('liandui');
+        }else if(value[0].indexOf('seq_trio') == 0){
+            var audio = this.game.add.audio('feiji');
+        }else if(value[0] == 'rocket'){
+            var audio = this.game.add.audio('wangzha');
+        }else if(value[0] == 'bomb'){
+            var audio = this.game.add.audio('zhadan');
+        }else if(value[0] == 'bomb_single'){
+            var audio = this.game.add.audio('sidaier');
+        }else{
+            var audio = this.game.add.audio('sidaidui');
+        }
+        return audio;
+    },
+
+    //寻找一个字符串中出现次数最多的字符
+    mainChar: function (str) {
+       var obj={};
+        for(var i=0;i<str.length;i++){
+            var key=str[i];//key中存储的是每一个字符串
+            if(obj[key]){//判断这个键值对中有没有这个键
+                obj[key]++;
+            }else{
+                obj[key]=1;//obj[w]=1
+            }
+        }
+        
+        var maxCount=0;//假设是出现次数最多的次数
+        var maxString="";//假设这个字符串是次数出现最多的字符串
+        for(var key in obj){
+            if(maxCount<obj[key]){
+                maxCount=obj[key];//保存最大的次数
+                maxString=key;
+            }
+        }
+        return maxString;
     }
 };
 
