@@ -115,7 +115,10 @@ PG.Game.prototype = {
                 if(emptyCount == 0){
                     this.player_num_desc.text = "";
                 }else{
-                    this.player_num_desc.text = "房间人数不足，请等待玩家加入或添加AI！";
+                    if(game_mode == 1){
+                        this.player_num_desc.text = "房间人数不足，请等待玩家加入或添加AI！";
+                    }
+                    
                 }
                 break;
             case PG.Protocol.RSP_DEAL_POKER:
