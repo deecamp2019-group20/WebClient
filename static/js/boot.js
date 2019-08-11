@@ -223,18 +223,17 @@ PG.Preloader = {
         PG.RuleList = this.cache.getJSON('rule');
         var jsonVal = document.getElementById("user").value;
         console.log(jsonVal)
-        this.state.start('MainMenu');
-        // if (jsonVal) {
-        //     //alert(jsonVal)
-        //     PG.playerInfo = JSON.parse(jsonVal);
-        //     if (PG.playerInfo['uid']) {
-        //         this.state.start('MainMenu');
-        //     } else {
-        //         this.state.start('Login');
-        //     }
-        // } else {
-        //     this.state.start('Login');
-        // }
+        if (jsonVal) {
+            //alert(jsonVal)
+            PG.playerInfo = JSON.parse(jsonVal);
+            if (PG.playerInfo['uid']) {
+                this.state.start('MainMenu');
+            } else {
+                this.state.start('Login');
+            }
+        } else {
+            this.state.start('Login');
+        }
         PG.music = this.game.add.audio('music_room');
         PG.music.loop = true;
         PG.music.loopFull();
@@ -384,7 +383,7 @@ PG.MainMenu = {
 
 PG.Login = {
     create: function () {
-        this.stage.backgroundColor = '#182d3b';
+        this.stage.backgroundColor = '#ffffff';
         var bg = this.game.add.sprite(this.game.width / 2, 0, 'bg');
         bg.anchor.set(0.5, 0);
 
