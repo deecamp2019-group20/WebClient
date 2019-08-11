@@ -223,17 +223,18 @@ PG.Preloader = {
         PG.RuleList = this.cache.getJSON('rule');
         var jsonVal = document.getElementById("user").value;
         console.log(jsonVal)
-        if (jsonVal) {
-            //alert(jsonVal)
-            PG.playerInfo = JSON.parse(jsonVal);
-            if (PG.playerInfo['uid']) {
-                this.state.start('MainMenu');
-            } else {
-                this.state.start('Login');
-            }
-        } else {
-            this.state.start('Login');
-        }
+        this.state.start('MainMenu');
+        // if (jsonVal) {
+        //     //alert(jsonVal)
+        //     PG.playerInfo = JSON.parse(jsonVal);
+        //     if (PG.playerInfo['uid']) {
+        //         this.state.start('MainMenu');
+        //     } else {
+        //         this.state.start('Login');
+        //     }
+        // } else {
+        //     this.state.start('Login');
+        // }
         PG.music = this.game.add.audio('music_room');
         PG.music.loop = true;
         PG.music.loopFull();
