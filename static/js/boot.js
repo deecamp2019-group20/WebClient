@@ -15,8 +15,7 @@ PG.PH = 120;
 GLOBAL_W = 1920;
 GLOBAL_H = 1080;
 
-FAPAI_SPEED = 400;
-INIT_CARD_SPEED = 500;
+INIT_CARD_SPEED = 300;
 
 var game_bg = 1;
 var origin_innerh,origin_innerw;
@@ -54,7 +53,6 @@ function getDirection() {
 PG.Boot = {
     preload: function () {
         this.load.image('preloaderBar', 'static/i/preload.png');
-        this.load.image('logo','static/i/logo.png');
     },
     create: function () {
         var device = this.game.device;
@@ -211,9 +209,7 @@ PG.Preloader = {
         this.load.image('bg1_left_bottom', 'static/i/bg1_left_bottom.png');
         this.load.image('playing_bg','static/i/bg2.png');
         this.load.image('start','static/i/start.png');
-        this.load.image('fight_ai','static/i/fight_ai.png');
-        this.load.image('human_play','static/i/human_play.png');
-        this.load.spritesheet('poker', 'static/i/pokers.png', 118, 161.5);
+        this.load.spritesheet('poker', 'static/i/pokers.png', 119, 163);
         this.load.json('rule', 'static/rule.json');
         this.load.atlas('robot_and_btn', 'static/i/robot_and_btn.png', 'static/i/robot_and_btn.json');
         this.load.atlas('mode_btn', 'static/i/mode_btn.png', 'static/i/mode_btn.json');

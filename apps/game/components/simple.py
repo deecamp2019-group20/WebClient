@@ -100,10 +100,10 @@ class AiPlayer(Player):
         used = set()
         for need_card in need_cards:
             # print(need_card)
-            if need_card == 17 and 52 in self.hand_pokers:
-                pokers.append(52)
-            elif need_card == 16 and 53 in self.hand_pokers:
+            if need_card == 17 and 53 in self.hand_pokers:
                 pokers.append(53)
+            elif need_card == 16 and 52 in self.hand_pokers:
+                pokers.append(52)
             elif need_card < 16:
                 if need_card == 14 or need_card == 15:
                     need_card -= 14
@@ -125,9 +125,9 @@ class AiPlayer(Player):
         # print(cards)
         for card in cards:
             if card == 52:
-                res.append(17)
-            elif card == 53:
                 res.append(16)
+            elif card == 53:
+                res.append(17)
             else:
                 tmp = card%13 + 1
                 if tmp == 1 or tmp == 2:

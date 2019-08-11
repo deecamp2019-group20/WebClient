@@ -310,7 +310,7 @@ PG.Player.prototype.dealPokerAnim = function (p, i) {
     this.game.add.tween(p).to({
         x: this.game.world.width / 2 + PG.PW * 0.5 * (i - 8.5),
         y: this.game.world.height - 140
-    }, FAPAI_SPEED, Phaser.Easing.Default, true, 50 * i);
+    }, INIT_CARD_SPEED, Phaser.Easing.Default, true, 50 * i);
 };
 
 PG.Player.prototype.arrangePoker = function () {

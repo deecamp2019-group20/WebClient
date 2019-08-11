@@ -41,9 +41,9 @@ PG.Poker.toCards = function (pokers) {
             pid = pid[0];
         }
         if (pid == 52) {
-            cards.push('W');
-        } else if (pid == 53) {
             cards.push('w');
+        } else if (pid == 53) {
+            cards.push('W');
         } else {
             cards.push("A234567890JQK"[pid % 13]);
         }
