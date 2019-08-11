@@ -18,7 +18,7 @@ class Table(object):
     CLOSED = 3
 
     def __init__(self, uid, room):
-        self.record_addr = 'http://117.78.4.26:5000/record'
+        self.record_addr = 'http://127.0.0.1:5000/record'
 
         self.uid = uid
         self.room = room

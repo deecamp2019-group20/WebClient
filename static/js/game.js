@@ -47,6 +47,8 @@ PG.Game.prototype = {
         game_music.loopFull();
         game_music.play();
 
+        this.player_num_desc = this.add.text(this.game.width / 2,60,"",{font:"30px myFont",fill:"#ffffff"});
+        this.player_num_desc.anchor.set(0.5,0);
         this.players.push(PG.createPlay(0, this));
         this.players.push(PG.createPlay(1, this));
         this.players.push(PG.createPlay(2, this));
@@ -92,25 +94,37 @@ PG.Game.prototype = {
                 // this.tableId = packet[1];
                 // this.titleBar.text = '房间:' + this.tableId;
                 var playerIds = packet[2];
+                var emptyCount = 2;
                 for (var i = 0; i < playerIds.length; i++) {
                     if (playerIds[i][0] == this.players[0].uid) {
                         var info_1 = playerIds[(i+1)%3];
                         var info_2 = playerIds[(i+2)%3];
                         this.uids[1] = info_1[0];
+                        if(this.uids[1] != -1){
+                            emptyCount -= 1;
+                        }
                         this.uids[2] = info_2[0];
+                        if(this.uids[2] != -1){
+                            emptyCount -= 1;
+                        }
                         this.players[1].updateInfo(info_1[0], info_1[1]);
                         this.players[2].updateInfo(info_2[0], info_2[1]);
                         break;
                     }
+                }
+                if(emptyCount == 0){
+                    this.player_num_desc.text = "";
+                }else{
+                    this.player_num_desc.text = "房间人数不足，请等待玩家加入或添加AI！";
                 }
                 break;
             case PG.Protocol.RSP_DEAL_POKER:
                 var playerId = packet[1];
                 var pokers = packet[2];
                 
-                //发牌音乐
-                var audio = this.game.add.audio('fapai');
-                audio.play();
+                //发牌音乐,效果不好还是不放了
+                // var audio = this.game.add.audio('fapai');
+                // audio.play();
 
                 this.dealPoker(pokers);
                 this.whoseTurn = this.uidToSeat(playerId);

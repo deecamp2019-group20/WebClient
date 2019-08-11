@@ -15,7 +15,7 @@ PG.PH = 120;
 GLOBAL_W = 1920;
 GLOBAL_H = 1080;
 
-FAPAI_SPEED = 200;
+FAPAI_SPEED = 400;
 INIT_CARD_SPEED = 500;
 
 var game_bg = 1;
@@ -210,7 +210,7 @@ PG.Preloader = {
         this.load.image('bg1_right_top', 'static/i/bg1_right_top.png');
         this.load.image('bg1_left_bottom', 'static/i/bg1_left_bottom.png');
         this.load.image('playing_bg','static/i/bg2.png');
-        this.load.image('join_game','static/i/join_game.png');
+        this.load.image('start','static/i/start.png');
         this.load.image('fight_ai','static/i/fight_ai.png');
         this.load.image('human_play','static/i/human_play.png');
         this.load.spritesheet('poker', 'static/i/pokers.png', 118, 161.5);
@@ -252,15 +252,10 @@ PG.MainMenu = {
         var bg1_right_top = this.game.add.sprite(this.game.width-966, 0, 'bg1_right_top');
         var bg1_left_bottom = this.game.add.sprite(0, this.game.height-176, 'bg1_left_bottom');
 
-        
-
         // 开始游戏按钮
-        this.start_game = this.game.add.button(this.game.world.width / 2, this.game.world.height / 4, 'join_game', this.showMask, this);
+        this.start_game = this.game.add.button(this.game.world.width / 2.5, this.game.world.height / 5 * 4, 'start', this.showMask, this);
         this.start_game.anchor.set(0.5);
         this.game.world.add(this.start_game);
-        
-        
-
         
         // var humanRoom = this.game.add.button(this.game.world.width / 2, this.game.world.height / 2, 'human_play', this.gotoRoom, this);
         // humanRoom.anchor.set(0.5);
@@ -324,19 +319,21 @@ PG.MainMenu = {
             this.return_homepage.kill();
             this.fight_ai_desc.kill();
             this.fight_human_desc.kill();
-            var MAX_LODING_TIME = 10;
+            var MAX_LODING_TIME = parseInt(Math.random()*(12-6+1)+6,10);
             for(var i = 0; i < MAX_LODING_TIME; i++){
                 console.log(i);
                 this.game.time.events.add(200*(i+1), function(i){
                     var str = "寻找房间中";
                     for(var j = 0; j <= i % 5; j++){
-                        console.log(i);
                         str += ".";
                     }
                     this.find_room_desc.text = str;
+                    if(i == MAX_LODING_TIME-1){
+                        this.find_room_desc.text = "正在进入房间！"
+                        this.game.time.events.add(500,this.gotoRoom,this);
+                    }
                 }, this,i);
             };
-            this.game.time.events.add(200*(MAX_LODING_TIME+1),this.gotoRoom,this);
             
         }, this);
 
