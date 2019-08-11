@@ -15,15 +15,15 @@ class HomeHandler(BaseHandler):
             self.set_cookie("_csrf", self.xsrf_token)
         
 
-        # ip = self.client_ip
-        # user_id = await self.db.fetchone('SELECT id FROM user WHERE ip=%s', ip)
-        # if user_id is None:
-        #     user_id = await self.db.insert('INSERT INTO user (ip) VALUES (%s)',
-        #                         ip)
-        # if type(user_id) != int:
-        #     user_id = user_id['id']
+        ip = self.client_ip
+        user_id = await self.db.fetchone('SELECT id FROM user WHERE ip=%s', ip)
+        if user_id is None:
+            user_id = await self.db.insert('INSERT INTO user (ip) VALUES (%s)',
+                                ip)
+        if type(user_id) != int:
+            user_id = user_id['id']
         info = {
-            'uid': HomeHandler.__user_count,
+            'uid': user_id,
             'username': str(uuid.uuid1()),
         }
         HomeHandler.__user_count += 1
