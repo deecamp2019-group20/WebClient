@@ -42,6 +42,7 @@ PG.Game.prototype = {
         game_bg.width = GLOBAL_W;
         game_bg.anchor.set(0.5, 0);
 
+
         game_music = this.add.audio('music_game');
         game_music.loop = true;
         game_music.loopFull();
@@ -197,16 +198,28 @@ PG.Game.prototype = {
                     //     var audio = this.game.add.audio('music_lose');
                     // }
                     // audio.play();
-
-
-                    if(this.whoseTurn == 0){
-                        alert('你赢了！');
-                        
-                    }else{
-                        alert('你输了！');
-                    }
                     this.cleanWorld();
-                    PG.Socket.send([PG.Protocol.REQ_RESTART]);
+                    
+                    
+                    this.mask = this.game.add.sprite(this.game.width / 2, 0, 'black_bg');
+                    this.mask.width = GLOBAL_W;
+                    this.mask.height = GLOBAL_H;
+                    this.mask.anchor.set(0.5, 0);
+                    this.mask.alpha = 0.99;
+                    if(this.whoseTurn == 0){
+                        //var audio = this.game.add.audio('music_win');
+                        this.result_desc = this.game.add.text(this.game.width / 2,this.game.height/3,"你赢了!",{font:"100px myFont",fill:"#ffffff",align:"center"});
+                    }else{
+                        //var audio = this.game.add.audio('music_lose');
+                        this.result_desc = this.game.add.text(this.game.width / 2,this.game.height/3,"你输了!",{font:"100px myFont",fill:"#ffffff",align:"center"});
+                    }
+                    //audio.play();
+                    this.result_desc.anchor.set(0.5);
+                    this.again = this.game.add.button(this.game.world.width / 2, this.game.world.height / 2, 'again', function(){
+                        PG.Socket.send([PG.Protocol.REQ_RESTART]);
+                    }, this);
+                    this.again.scale.set(0.8);
+                    this.again.anchor.set(0.5);
                 }
                 this.game.time.events.add(3000, gameOver, this);
                 break;
@@ -259,6 +272,15 @@ PG.Game.prototype = {
     },
 
 	restart: function () {
+        if(this.mask != undefined){
+            this.mask.kill();
+        }
+        if(this.result_desc != undefined){
+            this.result_desc.kill();
+        }
+        if(this.again != undefined){
+            this.again.kill();
+        }
         this.players = [];
         this.shotLayer = null;
 

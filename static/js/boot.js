@@ -209,6 +209,7 @@ PG.Preloader = {
         this.load.image('bg1_left_bottom', 'static/i/bg1_left_bottom.png');
         this.load.image('playing_bg','static/i/bg2.png');
         this.load.image('start','static/i/start.png');
+        this.load.image('again','static/i/play_again.png');
         this.load.spritesheet('poker', 'static/i/pokers.png', 119, 163);
         this.load.json('rule', 'static/rule.json');
         this.load.atlas('robot_and_btn', 'static/i/robot_and_btn.png', 'static/i/robot_and_btn.json');

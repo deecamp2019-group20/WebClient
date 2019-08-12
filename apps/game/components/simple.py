@@ -10,6 +10,7 @@ from ..player import Player
 from ..protocol import Protocol as Pt
 from ..rule import rule
 
+from ..score.call_score import call_score
 
 class AiPlayer(Player):
 
@@ -57,12 +58,18 @@ class AiPlayer(Player):
             logging.info('AI ERROR PACKET: %s', packet)
 
     def auto_call_score(self, score=0):
-        # millis = random.randint(1000, 2000)
-        # score = random.randint(min_score + 1, 3)
-        # print('auto_call_score:%d'%self.uid)
-
-        # change call score policy of ai here 
-        packet = [Pt.REQ_CALL_SCORE, self.table.call_score + 1]
+        # change call score policy of ai here
+        cards = self.change_card_type(self.hand_pokers)
+        score = call_score(cards)
+        cards.sort()
+        logging.info("----------------------------------")
+        logging.info(cards)
+        logging.info(score)
+        
+        if score <= self.table.call_score:
+            packet = [Pt.REQ_CALL_SCORE, 0]
+        else:
+            packet = [Pt.REQ_CALL_SCORE, score]
         IOLoop.current().add_callback(self.to_server, packet)
 
     def auto_shot_poker(self):
@@ -76,16 +83,19 @@ class AiPlayer(Player):
         history = {}
         lefts = {}
         last_takens = {}
+        hand_cards = {}
         for player in self.table.players:
             h = player.table.history[player.seat]
             l = len(player.hand_pokers)
             history[player.role] = self.change_card_type(h)
             lefts[player.role] = l
             last_takens[player.role] = self.change_card_type(player.handout_pokers[-1])
+            hand_cards[player.role] = self.change_card_type(player.hand_pokers)
         logging.info(self.table.last_shot_poker)
         body['history'] = history
         body['left'] = lefts
         body['last_taken'] = last_takens
+        body['hand_cards'] = hand_cards
         # if not self.table.last_shot_poker or self.table.last_shot_seat == self.seat:
         #     body['last_taken'] = []
         # else:
